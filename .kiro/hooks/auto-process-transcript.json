@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Auto-Process Meeting Transcript",
+      "trigger": "PostFileCreate",
+      "matcher": "samples/.*\\.(txt|md)$",
+      "action": {
+        "type": "agent",
+        "prompt": "A new meeting transcript file was just created in the samples/ directory. Please:\n1. Read the transcript file that was just created\n2. Send its content to POST /api/analyze with a meaningful title derived from the filename\n3. Display the structured results including: decisions made, action items with owners and deadlines, and participants\n4. Save the JSON response to samples/output/ directory with the same base filename but a .json extension\n\nIf the server is not running, remind the user to start it with: npm start (in the meeting-tracker directory)"
+      }
+    }
+  ]
+}

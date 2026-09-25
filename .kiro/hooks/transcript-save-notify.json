@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Transcript Save Reminder",
+      "trigger": "PostFileSave",
+      "description": "Reminds the user to analyze an updated transcript file",
+      "matcher": "samples/.*\\.(txt|md)$",
+      "action": {
+        "type": "command",
+        "command": "echo \"Meeting transcript updated. Drop it into the app at http://localhost:3000 or let Kiro analyze it automatically.\""
+      }
+    }
+  ]
+}

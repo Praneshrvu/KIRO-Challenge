@@ -1,0 +1,61 @@
+Date: October 15, 2026
+Meeting: Q4 Product Planning & Launch Review
+Attendees: Sarah Chen (PM), James Wright (Engineering Lead), Priya Nair (Design), Tom Okafor (Marketing), Lisa Huang (QA)
+
+Sarah: Good morning everyone. Let's get started — we have a lot to cover for Q4. First up, the launch date discussion.
+
+James: I've reviewed the current sprint velocity and the team's capacity. We're not going to hit the October 31st target. The payment integration alone needs two more weeks. I'd recommend pushing to November 14th.
+
+Sarah: That's a significant shift. Tom, how does that impact the marketing campaign?
+
+Tom: It's tight but workable. We need the final feature list by October 22nd to finalize the ad copy and press materials. But I'll need James to send me the key feature highlights by end of this week so we can start.
+
+Sarah: Agreed. James, can you own that?
+
+James: Yes, I'll have the feature highlights document sent to Tom by Friday, October 18th.
+
+Sarah: Good. So the decision is: we are moving the launch date from October 31st to November 14th. Everyone aligned?
+
+[General agreement from the group]
+
+Priya: Before we move on — I flagged last week that the onboarding flow has a major accessibility issue. Screen readers cannot navigate the signup form at all. This is a hard blocker for launch.
+
+Sarah: That absolutely has to be fixed before we go live. Priya, can you file the detailed ticket with the specific WCAG failures?
+
+Priya: Done, it's already filed as ticket #A-204. I've documented all three failures.
+
+James: I'll assign it to the front-end team today and mark it critical. Target fix date: October 25th, giving QA time to validate before launch.
+
+Sarah: Perfect. Also — I want to make a final call on Feature X, the sentiment analysis dashboard. Engineering, where are we?
+
+James: It's at about 60% completion. We could rush a basic version or cut it from this release.
+
+Sarah: Given the timeline pressure and the accessibility blocker, let's cut Feature X from the Q4 launch scope entirely. We will revisit it for Q1 2027. Tom, make sure the marketing materials don't reference it at all.
+
+Tom: Understood. I'll scrub it from the website copy and the launch deck by Monday, October 20th.
+
+Lisa: I have a blocker I need to raise. The staging environment credentials expired two days ago and it's blocking QA on three active test suites. I can't complete smoke testing for the payment module.
+
+James: My fault — I should have rotated those. I'll do it this afternoon and send the new credentials to Lisa directly.
+
+Sarah: Please make that your first priority after this call, James.
+
+James: Absolutely.
+
+Sarah: One more item — the beta user feedback survey needs to go out before we launch. Priya, can you take the lead on drafting it?
+
+Priya: Yes. I'll have a draft ready by October 21st and I'll ping Sarah for a review pass before it goes live.
+
+Sarah: Perfect. Let's also make sure we have a launch readiness review. I'll schedule a follow-up sync for October 28th — I'll send the calendar invite to everyone today.
+
+Tom: We also need to confirm the press embargo date with the PR agency once the November 14th date is locked. I'll reach out to them early next week.
+
+Sarah: Good call, Tom. Put that in your plan.
+
+Any other items?
+
+Lisa: Just a note — I'll need the payment integration deployed to staging by October 26th at the latest to have enough runway for full regression testing before launch.
+
+James: Noted. I'll make sure it's deployed to staging by October 25th, giving you a day of buffer.
+
+Sarah: Great. Alright, I think we've covered everything. Thanks everyone — see you on the 28th for the readiness review.
