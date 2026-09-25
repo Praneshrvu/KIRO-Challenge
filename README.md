@@ -1,8 +1,6 @@
 # 📋 Meeting Decision & Action Tracker
 
-An AI-powered web app that transforms raw meeting transcripts into structured summaries — extracting decisions, action items, owners, and deadlines using **AWS Bedrock (Claude)**.
-
-![Meeting Tracker Screenshot](https://via.placeholder.com/900x500/1a1d27/7c6af7?text=Meeting+Tracker+UI)
+An AI-powered web app that transforms raw meeting transcripts into structured summaries — extracting decisions, action items, owners, and deadlines using the **Groq** free LLM API. No AWS account needed.
 
 ---
 
@@ -10,7 +8,7 @@ An AI-powered web app that transforms raw meeting transcripts into structured su
 
 | Feature | Description |
 |---|---|
-| 🤖 AI Extraction | Claude 3 Sonnet via AWS Bedrock parses transcripts automatically |
+| 🤖 AI Extraction | Groq (Llama / Qwen) parses transcripts automatically |
 | ⚖️ Decisions | Lists every decision made with context/rationale |
 | ✅ Action Items | Table of tasks with owner, deadline, and priority |
 | 🔴🟡🟢 Priority Filter | Filter action items by High / Medium / Low |
@@ -28,13 +26,11 @@ An AI-powered web app that transforms raw meeting transcripts into structured su
 ### 1. Prerequisites
 
 - Node.js 18+
-- AWS account with **Bedrock model access** enabled for Claude 3 Sonnet
-  - Enable in: AWS Console → Bedrock → Model access → `anthropic.claude-3-sonnet-20240229-v1:0`
+- A free **Groq API key** — sign up at [console.groq.com](https://console.groq.com) (takes 30 seconds, no credit card)
 
 ### 2. Install Dependencies
 
 ```bash
-cd meeting-tracker
 npm install
 ```
 
@@ -48,14 +44,12 @@ cp .env.example .env
 Edit `.env`:
 
 ```env
-AWS_REGION=us-east-1
-AWS_ACCESS_KEY_ID=your_access_key
-AWS_SECRET_ACCESS_KEY=your_secret_key
-BEDROCK_MODEL_ID=anthropic.claude-3-sonnet-20240229-v1:0
+GROQ_API_KEY=gsk_your_key_here
+GROQ_MODEL=qwen/qwen3.8-27b
 PORT=3000
 ```
 
-> **Tip:** If running on an EC2 instance or in AWS CloudShell with an IAM role attached, you can omit the key/secret — the SDK picks up the role automatically.
+> Get your key at [console.groq.com](https://console.groq.com) → **API Keys** → **Create API key**
 
 ### 4. Start the Server
 
@@ -87,16 +81,11 @@ Open **http://localhost:3000** in your browser.
 Two hooks are pre-configured in `.kiro/hooks/`:
 
 ### `auto-process-transcript.json` — PostFileCreate
-**Trigger:** When a `.txt` or `.md` file is created inside `samples/`  
+**Trigger:** When a `.txt` or `.md` file is created inside `samples/`
 **Action:** Kiro automatically reads the transcript, calls the API, and displays the structured extraction results.
 
-**Usage:**
-1. Make sure the server is running (`npm start`)
-2. Drop any `.txt` transcript into the `samples/` folder
-3. Kiro detects the new file and analyzes it — no manual copy-paste needed
-
 ### `transcript-save-notify.json` — PostFileSave
-**Trigger:** When a transcript file in `samples/` is saved  
+**Trigger:** When a transcript file in `samples/` is saved
 **Action:** Reminds you to re-analyze the updated transcript
 
 ---
@@ -104,10 +93,10 @@ Two hooks are pre-configured in `.kiro/hooks/`:
 ## 📁 Project Structure
 
 ```
-meeting-tracker/
+.
 ├── src/
 │   ├── server.js          # Express API server
-│   └── bedrockClient.js   # AWS Bedrock / Claude integration
+│   └── bedrockClient.js   # Groq AI integration
 ├── public/
 │   ├── index.html         # Single-page app
 │   ├── style.css          # Dark-theme UI
@@ -144,20 +133,20 @@ Analyze a transcript.
   "success": true,
   "data": {
     "id": "uuid",
-    "title": "Q4 Planning Meeting",
-    "summary": "The team agreed to push the launch...",
+    "title": "Project Planning Meeting",
+    "summary": "The team agreed to complete the frontend...",
     "decisions": [
       { "id": "D1", "description": "...", "context": "..." }
     ],
     "actionItems": [
       {
-        "id": "A1", "task": "Update project plan",
-        "owner": "James", "deadline": "Oct 18",
-        "priority": "High", "relatedDecision": "D1"
+        "id": "A1", "task": "Finish the login page",
+        "owner": "Rahul", "deadline": "Friday",
+        "priority": "Medium", "relatedDecision": "D1"
       }
     ],
-    "participants": ["Sarah", "James", "Priya"],
-    "meetingDate": "October 15, 2026",
+    "participants": ["Sarah", "Rahul", "Priya"],
+    "meetingDate": null,
     "followUpRequired": true
   }
 }
@@ -172,15 +161,9 @@ Analyze a transcript.
 
 ## 🔧 Customization
 
-**Change the Claude model** — update `BEDROCK_MODEL_ID` in `.env`:
-```
-# Claude 3.5 Sonnet (if available in your region)
-BEDROCK_MODEL_ID=anthropic.claude-3-5-sonnet-20241022-v2:0
-```
+**Change the model** — update `GROQ_MODEL` in `.env`. Run `GET https://api.groq.com/openai/v1/models` with your key to see what's available on your account.
 
-**Persist meetings across restarts** — replace the in-memory `Map` in `server.js` with a database (DynamoDB, SQLite, etc.)
-
-**Add email notifications** — use AWS SES to email action item owners after each analysis.
+**Persist meetings across restarts** — replace the in-memory `Map` in `server.js` with a database (SQLite, Postgres, etc.)
 
 ---
 
@@ -188,11 +171,11 @@ BEDROCK_MODEL_ID=anthropic.claude-3-5-sonnet-20241022-v2:0
 
 | Error | Fix |
 |---|---|
-| `AccessDeniedException` | Enable model access in AWS Console → Bedrock → Model access |
+| `The security token included in the request is invalid` | Old AWS error — make sure you're on the Groq version and restarted the server |
+| `GROQ_API_KEY is not set` | Add your key to `.env` and restart |
+| `model_not_found` | The model name changed; pick one from the models list and update `GROQ_MODEL` |
 | `Cannot reach server` (red dot) | Run `npm start` and refresh |
 | `Transcript too short` | Provide at least 50 characters of content |
-| `ValidationException` | Transcript may be too long; try splitting into sections |
-| Credentials not found | Set `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` in `.env`, or attach an IAM role |
 
 ---
 
