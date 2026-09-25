@@ -121,8 +121,8 @@ app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     uptime: Math.floor(process.uptime()),
-    model: process.env.BEDROCK_MODEL_ID || "anthropic.claude-3-sonnet-20240229-v1:0",
-    region: process.env.AWS_REGION || "us-east-1",
+    model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+    provider: "Groq (free)",
   });
 });
 
@@ -134,8 +134,8 @@ app.get("*", (req, res) => {
 // ── Start ─────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\n🚀 Meeting Tracker running at http://localhost:${PORT}`);
-  console.log(`   Region : ${process.env.AWS_REGION || "us-east-1"}`);
-  console.log(`   Model  : ${process.env.BEDROCK_MODEL_ID || "anthropic.claude-3-sonnet-20240229-v1:0"}`);
+  console.log(`   Provider : Groq (free)`);
+  console.log(`   Model    : ${process.env.GROQ_MODEL || "llama-3.3-70b-versatile"}`);
   console.log(`   Press Ctrl+C to stop\n`);
 });
 
